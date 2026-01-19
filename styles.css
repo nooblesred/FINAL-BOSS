@@ -1,35 +1,24 @@
-/* =========================
-   PhotoSpark — styles.css
-   Minimal, clean, iPad-friendly
-   ========================= */
-
 :root{
   --bg: #0b0c10;
   --text: #f5f6ff;
   --muted: rgba(245,246,255,.72);
   --line: rgba(245,246,255,.12);
   --panel: rgba(255,255,255,.06);
-  --panel2: rgba(0,0,0,.20);
   --shadow: 0 18px 50px rgba(0,0,0,.35);
 
   --r: 18px;
   --r2: 14px;
-
   --pad: 16px;
   --gap: 12px;
-
   --focus: rgba(255,255,255,.26);
 }
 
 *{ box-sizing:border-box; }
 
-html, body{
-  margin:0;
-  padding:0;
-}
+html, body{ margin:0; padding:0; }
 
 body{
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
   background:
     radial-gradient(1100px 700px at 15% -20%, rgba(255,255,255,.09), transparent 55%),
@@ -43,7 +32,7 @@ body{
   padding: 18px 16px 32px;
 }
 
-/* ===== Header ===== */
+/* Header */
 .top{
   display:flex;
   align-items:center;
@@ -51,14 +40,12 @@ body{
   gap: 12px;
   padding: 6px 4px 14px;
 }
-
 .brand{
   display:flex;
   align-items:center;
   gap: 12px;
   user-select:none;
 }
-
 .logo{
   width: 44px;
   height: 44px;
@@ -68,27 +55,16 @@ body{
   border: 1px solid var(--line);
   border-radius: 14px;
 }
+.brandText .name{ font-weight: 900; font-size: 16px; letter-spacing:.2px; }
+.brandText .tag{ font-size: 12px; color: var(--muted); margin-top:2px; }
 
-.brandText .name{
-  font-weight: 900;
-  letter-spacing: .2px;
-  font-size: 16px;
-}
-
-.brandText .tag{
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 2px;
-}
-
-/* ===== Tabs ===== */
+/* Tabs */
 .tabs{
   display:flex;
   gap: 10px;
   flex-wrap:wrap;
   padding: 6px 0 12px;
 }
-
 .tab{
   border: 1px solid var(--line);
   background: rgba(255,255,255,.06);
@@ -96,19 +72,14 @@ body{
   padding: 10px 12px;
   border-radius: 14px;
   font-weight: 850;
-  letter-spacing: .2px;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
 }
-
-.tab.active{
-  background: rgba(255,255,255,.14);
-}
-
+.tab.active{ background: rgba(255,255,255,.14); }
 .panel{ display:none; }
 .panel.active{ display:block; }
 
-/* ===== Filters ===== */
+/* Filters */
 .filters{
   margin-bottom: 12px;
   border: 1px solid var(--line);
@@ -116,7 +87,6 @@ body{
   background: rgba(0,0,0,.18);
   padding: 10px 12px;
 }
-
 .filters summary{
   cursor:pointer;
   display:flex;
@@ -125,12 +95,7 @@ body{
   font-weight: 900;
   -webkit-tap-highlight-color: transparent;
 }
-
-.hint{
-  font-weight: 650;
-  color: var(--muted);
-  font-size: 12px;
-}
+.hint{ font-weight:650; color: var(--muted); font-size: 12px; }
 
 .grid2{
   margin-top: 10px;
@@ -138,11 +103,7 @@ body{
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
 }
-
-.field-full{
-  grid-column: 1 / -1;
-}
-
+.field-full{ grid-column: 1 / -1; }
 @media (max-width: 520px){
   .grid2{ grid-template-columns: 1fr; }
   .field-full{ grid-column: auto; }
@@ -165,17 +126,14 @@ select, input{
   outline: none;
   font-size: 15px;
 }
-
-input::placeholder{
-  color: rgba(245,246,255,.45);
-}
+input::placeholder{ color: rgba(245,246,255,.45); }
 
 select:focus, input:focus{
   border-color: var(--focus);
   box-shadow: 0 0 0 4px rgba(255,255,255,.06);
 }
 
-/* ===== Card ===== */
+/* Card */
 .card{
   background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
   border: 1px solid var(--line);
@@ -189,7 +147,6 @@ select:focus, input:focus{
   gap: 8px;
   flex-wrap:wrap;
 }
-
 .pill{
   font-size: 11px;
   letter-spacing: .8px;
@@ -199,10 +156,7 @@ select:focus, input:focus{
   border: 1px solid var(--line);
   background: rgba(255,255,255,.06);
 }
-
-.pill.subtle{
-  opacity: .86;
-}
+.pill.subtle{ opacity: .86; }
 
 h1{
   margin: 10px 0 6px;
@@ -210,7 +164,6 @@ h1{
   letter-spacing: -0.2px;
   line-height: 1.15;
 }
-
 p{
   margin: 0 0 12px;
   color: var(--muted);
@@ -218,37 +171,28 @@ p{
   font-size: 15.5px;
 }
 
-/* ===== Constraints ===== */
+/* Constraints */
 .mini{
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px dashed var(--line);
 }
+.miniLabel{ font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 
-.miniLabel{
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-
-#constraints{
+#constraints, #dailyConstraints{
   margin: 0;
   padding-left: 18px;
   color: var(--muted);
 }
+#constraints li, #dailyConstraints li{ margin: 6px 0; }
 
-#constraints li{
-  margin: 6px 0;
-}
-
-/* ===== Stats ===== */
+/* Stats */
 .stats{
   margin-top: 14px;
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
-
 .stat{
   border: 1px solid var(--line);
   background: rgba(0,0,0,.18);
@@ -256,26 +200,16 @@ p{
   padding: 10px 12px;
   text-align:center;
 }
+.statNum{ font-weight: 950; font-size: 20px; }
+.statLabel{ color: var(--muted); font-size: 12px; margin-top: 2px; }
 
-.statNum{
-  font-weight: 950;
-  font-size: 20px;
-}
-
-.statLabel{
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 2px;
-}
-
-/* ===== Buttons ===== */
+/* Buttons */
 .actions{
   margin-top: 14px;
   display:flex;
   gap: 10px;
   flex-wrap:wrap;
 }
-
 button{
   border: 1px solid var(--line);
   background: rgba(255,255,255,.10);
@@ -283,46 +217,29 @@ button{
   padding: 12px 14px;
   border-radius: var(--r2);
   font-weight: 900;
-  letter-spacing: .2px;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
   user-select:none;
 }
-
-button:hover{
-  background: rgba(255,255,255,.14);
-}
-
-button:active{
-  transform: translateY(1px);
-}
-
-button.secondary{
-  background: rgba(0,0,0,.22);
-}
-
+button:hover{ background: rgba(255,255,255,.14); }
+button:active{ transform: translateY(1px); }
+button.secondary{ background: rgba(0,0,0,.22); }
 button.ghost{
   background: transparent;
   border: 1px solid var(--line);
   padding: 10px 12px;
   border-radius: 14px;
 }
-
 button:focus{
   outline:none;
   box-shadow: 0 0 0 4px rgba(255,255,255,.08);
 }
 
-/* ===== Notes ===== */
-.note{
-  margin-top: 10px;
-}
+/* Notes */
+.note{ margin-top: 10px; }
+.muted{ color: var(--muted); }
 
-.muted{
-  color: var(--muted);
-}
-
-/* ===== Favorites / History lists ===== */
+/* Favorites / History lists */
 .panelHead{
   display:flex;
   align-items:center;
@@ -330,11 +247,9 @@ button:focus{
   gap: 10px;
   margin-bottom: 10px;
 }
+.favTopRight{ display:flex; gap:10px; align-items:center; }
 
-h2{
-  margin: 0;
-  font-size: 16px;
-}
+h2{ margin: 0; font-size: 16px; }
 
 .list{
   display:flex;
@@ -351,32 +266,26 @@ h2{
   border: 1px solid var(--line);
   background: rgba(0,0,0,.18);
 }
+.item strong{ display:block; font-size: 13px; margin-bottom: 2px; }
+.item small{ color: var(--muted); }
+.item .miniRow{ margin-top: 8px; display:flex; gap: 8px; flex-wrap:wrap; }
 
-.item strong{
-  display:block;
-  font-size: 13px;
-  margin-bottom: 2px;
+.folderBar{
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.18);
+  border-radius: 16px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
 }
 
-.item small{
-  color: var(--muted);
-}
-
-.item .miniRow{
-  margin-top: 8px;
-  display:flex;
-  gap: 8px;
-  flex-wrap:wrap;
-}
-
-/* ===== Footer ===== */
+/* Footer */
 .foot{
   padding: 16px 6px 0;
   color: var(--muted);
   text-align:center;
 }
 
-/* ===== Overlays (Loading + Timer) ===== */
+/* Overlays */
 .overlay{
   position: fixed;
   inset: 0;
@@ -387,10 +296,7 @@ h2{
   padding: 18px;
   z-index: 999;
 }
-
-.overlay.hidden{
-  display:none;
-}
+.overlay.hidden{ display:none; }
 
 .overlayCard{
   width: min(420px, 100%);
@@ -402,41 +308,24 @@ h2{
   text-align:center;
 }
 
-.overlayTitle{
-  font-weight: 950;
-  margin-top: 10px;
-}
-
-.overlayText{
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
 .spinner{
-  width: 34px;
-  height: 34px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   border: 3px solid rgba(255,255,255,.18);
   border-top-color: rgba(255,255,255,.9);
   margin: 0 auto;
   animation: spin 1s linear infinite;
 }
+@keyframes spin{ to{ transform: rotate(360deg); } }
 
-@keyframes spin{
-  to{ transform: rotate(360deg); }
-}
-
-/* ===== Timer modal (custom overlay) ===== */
 .modal{
-  width: min(520px, 100%);
+  width: min(560px, 100%);
   border-radius: 18px;
   border: 1px solid var(--line);
   background: rgba(15,16,22,.96);
   box-shadow: var(--shadow);
   padding: 14px;
 }
-
 .modalHead{
   display:flex;
   align-items:center;
@@ -445,6 +334,7 @@ h2{
   border-bottom: 1px solid var(--line);
   margin-bottom: 10px;
 }
+.modalTitle{ margin: 10px 0 6px; font-size: 18px; }
 
 .row{
   display:flex;
@@ -461,14 +351,41 @@ h2{
   background: rgba(0,0,0,.20);
   text-align:center;
 }
-
 .time{
   font-size: 34px;
   font-weight: 950;
   letter-spacing: 1px;
 }
 
-/* ===== Toast ===== */
+/* Folder modal */
+.folderCreate{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  margin-top: 10px;
+}
+.folderCreate input{ flex: 1; }
+
+.folderList{
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(0,0,0,.18);
+  padding: 10px 12px;
+  max-height: 260px;
+  overflow:auto;
+}
+.folderItem{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.folderItem:last-child{ border-bottom: none; }
+.folderItem input{ width: 18px; height: 18px; }
+
+/* Toast */
 .toast{
   position: fixed;
   left: 50%;
@@ -485,12 +402,6 @@ h2{
   transition: opacity .2s ease;
   z-index: 1000;
 }
+.toast.show{ opacity: 1; }
 
-.toast.show{
-  opacity: 1;
-}
-
-/* ===== Small niceties ===== */
-::selection{
-  background: rgba(255,255,255,.18);
-}
+::selection{ background: rgba(255,255,255,.18); }
