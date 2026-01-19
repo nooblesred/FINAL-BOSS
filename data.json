@@ -1,0 +1,70 @@
+[
+  {"cat":"Light","diff":"Easy","terrain":["Indoor"],"title":"Window Light Shapes","text":"Photograph light shapes from a window on a wall or floor.","constraints":["No flash","3 angles","1 close-up"]},
+  {"cat":"Light","diff":"Medium","terrain":["Urban"],"title":"Neon Hunt","text":"Capture colorful signs or shop lights after sunset.","constraints":["5 shots","Include reflections","One wide"]},
+  {"cat":"Light","diff":"Hard","terrain":["Lake/River"],"title":"Glitter Path","text":"Photograph sun glitter on water as a leading line.","constraints":["Low angle","Try 10 frames","Pick best 1"]},
+
+  {"cat":"Shadows","diff":"Easy","terrain":["Indoor"],"title":"Shadow Letters","text":"Create letters with shadows using any object near a lamp.","constraints":["3 letters","Clean background","No faces"]},
+  {"cat":"Shadows","diff":"Medium","terrain":["Urban"],"title":"Crosswalk Shadows","text":"Photograph repeating shadows from rails, fences, or stairs.","constraints":["Find repetition","Change distance","3 variations"]},
+  {"cat":"Shadows","diff":"Hard","terrain":["Desert"],"title":"Harsh Noon Graphic","text":"Use harsh midday shadows to make a bold abstract photo.","constraints":["One subject only","Hard edges","High contrast"]},
+
+  {"cat":"Nature","diff":"Easy","terrain":["Park/Forest"],"title":"Texture Treasure","text":"Photograph 8 different natural textures (bark, moss, stone).","constraints":["Fill frame","8 shots","One macro-style"]},
+  {"cat":"Nature","diff":"Medium","terrain":["Mountains"],"title":"Layers of Peaks","text":"Capture mountain layers with foreground, midground, background.","constraints":["3 layers","One silhouette","Try 6 frames"]},
+  {"cat":"Nature","diff":"Hard","terrain":["Snow/Ice"],"title":"Minimal Snow Story","text":"Photograph a single subject against snow with lots of space.","constraints":["One subject","Negative space","3 attempts"]},
+
+  {"cat":"Street","diff":"Easy","terrain":["Urban"],"title":"One Color Walk","text":"Pick one color and photograph it 5 times on your walk.","constraints":["Same color","5 shots","Different objects"]},
+  {"cat":"Street","diff":"Medium","terrain":["Urban"],"title":"Frames Within Frames","text":"Use doorways, windows, arches, or shadows to frame a subject.","constraints":["3 frames","One person allowed","One object frame"]},
+  {"cat":"Street","diff":"Hard","terrain":["Urban"],"title":"Story in 3 Frames","text":"Tell a mini story in three photos from the same street corner.","constraints":["Beginning/middle/end","Same location","3 shots only"]},
+
+  {"cat":"Emotion","diff":"Easy","terrain":["Indoor"],"title":"Mood Corner","text":"Photograph a corner of your home that feels calm or tense.","constraints":["No faces","One light source","3 frames"]},
+  {"cat":"Emotion","diff":"Medium","terrain":["Park/Forest"],"title":"Lonely Bench","text":"Capture the feeling of loneliness using an empty bench or path.","constraints":["No people","Use leading lines","5 frames"]},
+  {"cat":"Emotion","diff":"Hard","terrain":["Ocean/Beach"],"title":"Power of Waves","text":"Photograph the emotion of power using waves or wind.","constraints":["Movement visible","3 attempts","Choose best 1"]},
+
+  {"cat":"Objects","diff":"Easy","terrain":["Indoor"],"title":"Everyday Hero","text":"Make one everyday object look important and dramatic.","constraints":["Clean background","One light source","3 angles"]},
+  {"cat":"Objects","diff":"Medium","terrain":["Urban"],"title":"Unexpected Pairing","text":"Photograph two objects together that don’t belong.","constraints":["2 objects","Tell a story","5 frames"]},
+  {"cat":"Objects","diff":"Hard","terrain":["Lake/River"],"title":"Object + Reflection","text":"Photograph an object and its reflection as a composition.","constraints":["Reflection included","Try low angle","8 frames"]},
+
+  {"cat":"Portrait","diff":"Easy","terrain":["Indoor"],"title":"Hands Tell a Story","text":"Photograph hands doing something meaningful.","constraints":["No face","3 shots","One close-up"]},
+  {"cat":"Portrait","diff":"Medium","terrain":["Park/Forest"],"title":"Environmental Portrait","text":"Photograph someone in a place that represents them.","constraints":["Wide + tight","Natural light","5 frames"]},
+  {"cat":"Portrait","diff":"Hard","terrain":["Urban"],"title":"Shadow Portrait","text":"Use shadow patterns across a person for a creative portrait.","constraints":["Patterned shadows","No flash","6 frames"]},
+
+  {"cat":"Motion","diff":"Easy","terrain":["Urban"],"title":"Walking Blur","text":"Capture motion by photographing people walking past.","constraints":["Try 10 shots","One sharp element","One blurred element"]},
+  {"cat":"Motion","diff":"Medium","terrain":["Ocean/Beach"],"title":"Wind Movement","text":"Photograph movement caused by wind (hair, flags, water).","constraints":["Movement visible","5 shots","One close-up"]},
+  {"cat":"Motion","diff":"Hard","terrain":["Mountains"],"title":"Cloud Drift","text":"Show clouds moving across peaks in a dynamic composition.","constraints":["Wide shot","Try 8 frames","Pick best 1"]},
+
+  {"cat":"Night","diff":"Easy","terrain":["Urban"],"title":"Street Light Pool","text":"Photograph a pool of light under a street lamp.","constraints":["No flash","One subject","5 frames"]},
+  {"cat":"Night","diff":"Medium","terrain":["Lake/River"],"title":"Night Reflection","text":"Capture city or moon reflections on water at night.","constraints":["Reflection clear","Try 10 frames","One wide"]},
+  {"cat":"Night","diff":"Hard","terrain":["Desert"],"title":"Dark Sky Silhouette","text":"Photograph a silhouette against a dark sky.","constraints":["One silhouette","Clean horizon","3 attempts"]},
+
+  {"cat":"Macro","diff":"Easy","terrain":["Indoor"],"title":"Tiny Details","text":"Photograph 10 tiny details around your home.","constraints":["10 shots","Different subjects","Fill frame"]},
+  {"cat":"Macro","diff":"Medium","terrain":["Park/Forest"],"title":"Leaf Veins","text":"Photograph leaf veins or petals like a landscape.","constraints":["Fill frame","3 angles","Soft light"]},
+  {"cat":"Macro","diff":"Hard","terrain":["Snow/Ice"],"title":"Ice Patterns","text":"Photograph patterns in ice or frost as abstract art.","constraints":["Abstract only","No horizon","8 frames"]},
+
+  {"cat":"Minimal","diff":"Easy","terrain":["Indoor"],"title":"One Object, Lots of Space","text":"Photograph one object with lots of negative space.","constraints":["Simple background","3 shots","Centered once"]},
+  {"cat":"Minimal","diff":"Medium","terrain":["Ocean/Beach"],"title":"Horizon Minimal","text":"Make a minimal horizon composition with only 2–3 elements.","constraints":["2–3 elements","Straight horizon","5 frames"]},
+  {"cat":"Minimal","diff":"Hard","terrain":["Snow/Ice"],"title":"White on White","text":"Capture a subject that barely separates from the background.","constraints":["Subtle contrast","One subject","6 frames"]},
+
+  {"cat":"Light","diff":"Easy","terrain":["Urban"],"title":"Golden Hour Corner","text":"Find one building corner and shoot it in warm light.","constraints":["Same corner","3 angles","One close-up"]},
+  {"cat":"Shadows","diff":"Easy","terrain":["Park/Forest"],"title":"Tree Shadow Pattern","text":"Photograph tree shadows making patterns on the ground.","constraints":["Pattern focus","No people","5 frames"]},
+  {"cat":"Nature","diff":"Medium","terrain":["Lake/River"],"title":"Water Edge Story","text":"Photograph the meeting point of land and water.","constraints":["Texture","Leading line","6 frames"]},
+  {"cat":"Street","diff":"Medium","terrain":["Urban"],"title":"Reflections Only","text":"Take 5 photos where the main subject is seen in reflection.","constraints":["5 shots","Different reflective surfaces","No selfies"]},
+  {"cat":"Emotion","diff":"Medium","terrain":["Urban"],"title":"Rush vs Still","text":"Capture contrast between busy movement and a still subject.","constraints":["One still subject","Busy background","8 frames"]},
+  {"cat":"Objects","diff":"Easy","terrain":["Indoor"],"title":"Kitchen Geometry","text":"Photograph repeating shapes in your kitchen.","constraints":["Repetition","3 shots","Different angles"]},
+
+  {"cat":"Portrait","diff":"Easy","terrain":["Urban"],"title":"Back-of-Head Story","text":"Photograph a person from behind to suggest a story.","constraints":["No face","Use environment","5 frames"]},
+  {"cat":"Motion","diff":"Medium","terrain":["Park/Forest"],"title":"Running Water","text":"Photograph moving water (stream/fountain) to show motion.","constraints":["Movement visible","5 frames","One close-up"]},
+  {"cat":"Night","diff":"Easy","terrain":["Indoor"],"title":"Lamp Light Scene","text":"Create a small scene lit only by a lamp and photograph it.","constraints":["One lamp only","No flash","3 frames"]},
+  {"cat":"Macro","diff":"Easy","terrain":["Urban"],"title":"Street Texture Close-ups","text":"Photograph 6 textures: paint, rust, concrete, metal, wood, glass.","constraints":["6 textures","Fill frame","One diagonal"]},
+  {"cat":"Minimal","diff":"Medium","terrain":["Mountains"],"title":"Single Tree Landscape","text":"Find one isolated tree and use space to make it dramatic.","constraints":["One tree","Negative space","5 frames"]},
+
+  {"cat":"Light","diff":"Hard","terrain":["Snow/Ice"],"title":"Blinding Bright Detail","text":"Photograph bright snow highlights while keeping a dark subject visible.","constraints":["One dark subject","Bright background","8 frames"]},
+  {"cat":"Shadows","diff":"Medium","terrain":["Ocean/Beach"],"title":"Long Sunset Shadows","text":"Use long shadows at sunset to lead the eye toward a subject.","constraints":["Leading shadow","One subject","6 frames"]},
+  {"cat":"Nature","diff":"Easy","terrain":["Desert"],"title":"Sand Patterns","text":"Photograph patterns in sand (ripples, footprints, wind lines).","constraints":["Abstract or close-up","5 shots","One wide"]},
+  {"cat":"Street","diff":"Hard","terrain":["Urban"],"title":"Only One Lens View","text":"Shoot one scene from 5 positions without changing your distance much.","constraints":["Same subject area","5 positions","Pick best 1"]},
+  {"cat":"Emotion","diff":"Hard","terrain":["Rain/Storm","Urban"],"title":"Rainy Mood","text":"Capture the emotion of rain using umbrellas, puddles, or wet surfaces.","constraints":["Water visible","No flash","6 frames"]},
+
+  {"cat":"Objects","diff":"Hard","terrain":["Indoor"],"title":"Shadow Sculpture","text":"Use objects to create a shadow composition more interesting than the objects.","constraints":["Shadow is main","One light","8 frames"]},
+  {"cat":"Portrait","diff":"Hard","terrain":["Ocean/Beach"],"title":"Silhouette Portrait","text":"Make a clean silhouette portrait against the sky or water.","constraints":["No face detail","Clean outline","5 frames"]},
+  {"cat":"Motion","diff":"Hard","terrain":["Urban"],"title":"Busy Background Motion","text":"Keep your subject still while the background blurs with movement.","constraints":["One still subject","Motion blur present","10 attempts"]},
+  {"cat":"Night","diff":"Medium","terrain":["Urban"],"title":"Bokeh Lights","text":"Photograph distant lights as soft circles behind a subject.","constraints":["Foreground subject","Lights behind","8 frames"]},
+  {"cat":"Macro","diff":"Hard","terrain":["Indoor"],"title":"Abstract Household Macro","text":"Make an abstract image from a close-up of a household object.","constraints":["No obvious identity","Fill frame","10 tries"]}
+]
