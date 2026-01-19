@@ -1,30 +1,29 @@
 /* =========================
    PhotoSpark — app.js
    Option A: loads prompts from data.json
-   Upgrades:
+
+   Includes:
    (1) Versioned cache reset (DATA_VERSION)
-   (2) Debounced search (smooth for 10k prompts)
+   (2) Debounced search (smooth for 10k)
+   (3) No repeats (New Prompt avoids showing same prompt twice)
+   (4) Smart relax + terrain preference when pool is empty / small
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   // -------- CONFIG --------
   const PROMPTS_URL = "data.json";
 
-  // App logic version (change only if you change code behavior)
-  const APP_VERSION = "v2";
-
-  // (1) DATA_VERSION: BUMP THIS whenever you replace/expand data.json
-  // Example: "2026-01-19-50" then later "2026-01-20-5000"
+  // BUMP THIS whenever you replace/expand data.json
   const DATA_VERSION = "2026-01-19-50";
 
-  // Cache key includes DATA_VERSION so old cached prompt sets are ignored automatically
-  const CACHE_KEY = `ps_prompts_cache_${APP_VERSION}_${DATA_VERSION}`;
+  const CACHE_KEY = `ps_prompts_cache_${DATA_VERSION}`;
 
   const LS = {
     fav: "ps_fav_v1",
     hist: "ps_hist_v1",
     streak: "ps_streak_v1",
-    streakDate: "ps_streak_date_v1"
+    streakDate: "ps_streak_date_v1",
+    lastPromptKey: "ps_last_prompt_key_v1"
   };
 
   // -------- ELEMENTS --------
@@ -127,8 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(key, JSON.stringify(val));
   }
 
-  // -------- (2) DEBOUNCE --------
-  function debounce(fn, waitMs = 200) {
+  // -------- DEBOUNCE --------
+  function debounce(fn, waitMs = 220) {
     let t = null;
     return (...args) => {
       if (t) clearTimeout(t);
@@ -147,7 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return [];
   }
 
-  // build a searchable string once (important for 10k prompts)
   function buildHay(p) {
     const terr = normalizeTerrain(p);
     const cons = Array.isArray(p.constraints) ? p.constraints : [];
@@ -174,8 +172,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return p;
   }
 
-  // -------- FILTERING --------
-  function pool() {
+  function promptKey(p) {
+    // stable enough for "no repeats" even with duplicates
+    return `${p.cat}||${p.diff}||${p.title}`.toLowerCase();
+  }
+
+  // -------- FILTERING (strict pool) --------
+  function strictPool() {
     const c = el.category.value;
     const d = el.diff.value;
     const t = el.terrain.value;
@@ -185,15 +188,87 @@ document.addEventListener("DOMContentLoaded", () => {
       const catOk = (c === "any" || p.cat === c);
       const diffOk = (d === "any" || p.diff === d);
       const terrOk = (t === "any" || p.terrain.includes(t));
-
       if (!catOk || !diffOk || !terrOk) return false;
       if (!q) return true;
-
       return p._hay.includes(q);
     });
   }
 
-  // Daily deterministic pick
+  // -------- (4) SMART RELAX POOL --------
+  function relaxedPool() {
+    // Start strict, then relax in order if empty
+    const original = {
+      c: el.category.value,
+      d: el.diff.value,
+      t: el.terrain.value,
+      q: (el.search.value || "").trim()
+    };
+
+    let arr = strictPool();
+    if (arr.length) return { arr, mode: baseModeLabel(), relaxed: false };
+
+    // 1) drop search
+    if (original.q) {
+      el.search.value = "";
+      arr = strictPool();
+      if (arr.length) {
+        toast("No matches — search cleared.");
+        return { arr, mode: "RELAXED", relaxed: true };
+      }
+    }
+
+    // 2) drop difficulty
+    if (original.d !== "any") {
+      el.diff.value = "any";
+      arr = strictPool();
+      if (arr.length) {
+        toast("No matches — difficulty set to Any.");
+        return { arr, mode: "RELAXED", relaxed: true };
+      }
+    }
+
+    // 3) drop category
+    if (original.c !== "any") {
+      el.category.value = "any";
+      arr = strictPool();
+      if (arr.length) {
+        toast("No matches — category set to Any.");
+        return { arr, mode: "RELAXED", relaxed: true };
+      }
+    }
+
+    // 4) drop terrain
+    if (original.t !== "any") {
+      el.terrain.value = "any";
+      arr = strictPool();
+      if (arr.length) {
+        toast("No matches — terrain set to Any.");
+        return { arr, mode: "RELAXED", relaxed: true };
+      }
+    }
+
+    // Still empty: restore (rare; means PROMPTS empty)
+    el.category.value = original.c;
+    el.diff.value = original.d;
+    el.terrain.value = original.t;
+    el.search.value = original.q;
+
+    return { arr: [], mode: baseModeLabel(), relaxed: false };
+  }
+
+  function baseModeLabel() {
+    return (el.search.value || "").trim() ? "SEARCH" : "RANDOM";
+  }
+
+  // Prefer exact terrain matches first (when terrain filter is set)
+  function terrainPreferred(arr) {
+    const t = el.terrain.value;
+    if (t === "any") return arr;
+    const exact = arr.filter(p => p.terrain.includes(t));
+    return exact.length ? exact : arr;
+  }
+
+  // -------- DAILY deterministic pick --------
   function dailyKey() {
     const q = (el.search.value || "").trim().toLowerCase();
     return `${new Date().toDateString()}|${el.category.value}|${el.diff.value}|${el.terrain.value}|${q}`;
@@ -247,13 +322,16 @@ document.addEventListener("DOMContentLoaded", () => {
       el.noteLine.textContent = "Tip: Tap Done after you shoot to build your streak.";
     }
 
+    // store last prompt key for "no repeats"
+    localStorage.setItem(LS.lastPromptKey, promptKey(p));
+
     updateStats();
   }
 
   function pushHistory(p) {
     const hist = load(LS.hist, []);
     const entry = { cat: p.cat, diff: p.diff, title: p.title, text: p.text, ts: Date.now() };
-    const next = [entry, ...hist.filter(h => h.title !== p.title)].slice(0, 60);
+    const next = [entry, ...hist.filter(h => h.title !== p.title)].slice(0, 80);
     save(LS.hist, next);
     renderHistory();
     updateStats();
@@ -301,25 +379,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------- CORE ACTIONS --------
+  // (3) No repeats: re-pick a few times if same prompt as last
+  function pickNoRepeat(arr) {
+    const lastKey = localStorage.getItem(LS.lastPromptKey) || "";
+    if (arr.length <= 1) return arr[0];
+
+    // Prefer exact terrain matches first (4)
+    const preferred = terrainPreferred(arr);
+
+    for (let tries = 0; tries < 8; tries++) {
+      const p = pick(preferred);
+      if (promptKey(p) !== lastKey) return p;
+    }
+    // fallback
+    return pick(preferred);
+  }
+
   function newPrompt() {
-    const arr = pool();
+    const result = relaxedPool();
+    const arr = result.arr;
+
     if (!arr.length) {
-      toast("No matches. Clear search or loosen filters.");
+      toast("No prompts available yet.");
       return;
     }
-    const p = pick(arr);
-    const mode = (el.search.value || "").trim() ? "SEARCH" : "RANDOM";
-    renderPrompt(p, mode);
+
+    const p = pickNoRepeat(arr);
+    renderPrompt(p, result.mode);
     pushHistory(p);
   }
 
   function dailyPrompt() {
-    const arr = pool();
+    const arr = strictPool();
     if (!arr.length) {
-      toast("No matches for Daily. Clear search or loosen filters.");
+      toast("No matches for Daily. Adjust filters/search.");
       return;
     }
-    const p = deterministicPick(arr, dailyKey());
+    // still prefer terrain if set (small improvement)
+    const preferred = terrainPreferred(arr);
+    const p = deterministicPick(preferred, dailyKey());
     renderPrompt(p, "DAILY");
     pushHistory(p);
     toast("Daily prompt loaded");
@@ -339,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toast("Saved");
     }
 
-    save(LS.fav, favs.slice(0, 500));
+    save(LS.fav, favs.slice(0, 1000));
     renderFavorites();
 
     const isFav = load(LS.fav, []).some(x => x.title === current.title && x.cat === current.cat);
@@ -491,7 +589,6 @@ Constraints:
   }
 
   async function loadPrompts() {
-    // Cache first (instant)
     const cached = load(CACHE_KEY, null);
     if (Array.isArray(cached) && cached.length) {
       PROMPTS = cached;
@@ -507,7 +604,6 @@ Constraints:
       return;
     }
 
-    // No cache
     showLoading(true);
     try {
       const fresh = await fetchPrompts();
@@ -534,14 +630,13 @@ Constraints:
     el.doneBtn.addEventListener("click", markDone);
     el.shareBtn.addEventListener("click", copyCurrent);
 
-    // Filters
+    // Filters: changing filters = new prompt from new pool
     el.category.addEventListener("change", newPrompt);
     el.diff.addEventListener("change", newPrompt);
     el.terrain.addEventListener("change", newPrompt);
 
-    // (2) Debounced search input
-    const debouncedSearch = debounce(newPrompt, 220);
-    el.search.addEventListener("input", debouncedSearch);
+    // Debounced search
+    el.search.addEventListener("input", debounce(newPrompt, 220));
 
     // Lists
     el.favoritesList.addEventListener("click", listHandler);
