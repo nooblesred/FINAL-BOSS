@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PhotoSpark</title>
+  <meta name="description" content="Creative photography ideas and prompts — no social, just inspiration." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="app">
+    <header class="top">
+      <div class="brand" aria-label="PhotoSpark">
+        <div class="logo" aria-hidden="true">📸</div>
+        <div class="brandText">
+          <div class="name">PhotoSpark</div>
+          <div class="tag">Just ideas that spark photography.</div>
+        </div>
+      </div>
+
+      <button class="ghost" id="shareBtn" type="button" title="Copy prompt text">
+        Copy
+      </button>
+    </header>
+
+    <nav class="tabs" aria-label="App sections">
+      <button class="tab active" data-tab="prompt" type="button">Prompt</button>
+      <button class="tab" data-tab="favorites" type="button">Favorites</button>
+      <button class="tab" data-tab="history" type="button">History</button>
+    </nav>
+
+    <!-- PROMPT TAB -->
+    <section class="panel active" id="tab-prompt" aria-label="Prompt">
+      <details class="filters" open>
+        <summary>
+          <span>Filters</span>
+          <span class="hint">Category + Difficulty + Terrain + Search</span>
+        </summary>
+
+        <div class="grid2">
+          <label class="field">
+            <span>Category</span>
+            <select id="categorySelect">
+              <option value="any">Any</option>
+              <option value="Nature">Nature</option>
+              <option value="Street">Street</option>
+              <option value="Light">Light</option>
+              <option value="Shadows">Shadows</option>
+              <option value="Emotion">Emotion</option>
+              <option value="Objects">Objects</option>
+              <option value="Portrait">Portrait</option>
+              <option value="Motion">Motion</option>
+              <option value="Night">Night</option>
+              <option value="Macro">Macro</option>
+              <option value="Minimal">Minimal</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Difficulty</span>
+            <select id="diffSelect">
+              <option value="any">Any</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Terrain</span>
+            <select id="terrainSelect">
+              <option value="any">Any</option>
+              <option value="Indoor">Indoor</option>
+              <option value="Urban">Urban</option>
+              <option value="Park/Forest">Park/Forest</option>
+              <option value="Mountains">Mountains</option>
+              <option value="Ocean/Beach">Ocean/Beach</option>
+              <option value="Desert">Desert</option>
+              <option value="Snow/Ice">Snow/Ice</option>
+              <option value="Lake/River">Lake/River</option>
+            </select>
+          </label>
+
+          <label class="field field-full">
+            <span>Search</span>
+            <input id="searchInput" type="text" placeholder="e.g., shadow, reflection, hands, rain..." />
+          </label>
+        </div>
+      </details>
+
+      <article class="card" aria-live="polite">
+        <div class="meta">
+          <span class="pill" id="pillCat">—</span>
+          <span class="pill subtle" id="pillDiff">—</span>
+          <span class="pill subtle" id="pillTerrain">—</span>
+          <span class="pill subtle" id="pillMode">—</span>
+        </div>
+
+        <h1 id="promptTitle">Loading…</h1>
+        <p id="promptText">Loading prompt…</p>
+
+        <div class="mini">
+          <div class="miniLabel">Quick constraints</div>
+          <ul id="constraints"></ul>
+        </div>
+
+        <div class="stats" aria-label="Stats">
+          <div class="stat">
+            <div class="statNum" id="streakNum">0</div>
+            <div class="statLabel">Day streak</div>
+          </div>
+          <div class="stat">
+            <div class="statNum" id="favNum">0</div>
+            <div class="statLabel">Saved</div>
+          </div>
+          <div class="stat">
+            <div class="statNum" id="histNum">0</div>
+            <div class="statLabel">History</div>
+          </div>
+        </div>
+
+        <div class="actions" aria-label="Actions">
+          <button id="newBtn" type="button">New Prompt</button>
+          <button class="secondary" id="dailyBtn" type="button">Daily</button>
+          <button class="secondary" id="timerBtn" type="button">Timer</button>
+          <button class="secondary" id="saveBtn" type="button">☆ Save</button>
+          <button class="secondary" id="doneBtn" type="button">Done</button>
+        </div>
+
+        <div class="note muted" id="noteLine"></div>
+      </article>
+    </section>
+
+    <!-- FAVORITES TAB -->
+    <section class="panel" id="tab-favorites" aria-label="Favorites">
+      <div class="panelHead">
+        <h2>Favorites</h2>
+        <button class="ghost" id="clearFavBtn" type="button">Clear</button>
+      </div>
+      <div id="favoritesList" class="list" aria-label="Favorite prompts"></div>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section class="panel" id="tab-history" aria-label="History">
+      <div class="panelHead">
+        <h2>History</h2>
+        <button class="ghost" id="clearHistBtn" type="button">Clear</button>
+      </div>
+      <div id="historyList" class="list" aria-label="Prompt history"></div>
+    </section>
+
+    <footer class="foot">
+      <small>No posting, no likes — just ideas that spark photography.</small>
+    </footer>
+
+    <!-- LOADING OVERLAY (used while data.json is loading) -->
+    <div class="overlay hidden" id="loadingOverlay" aria-hidden="true">
+      <div class="overlayCard" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="overlayTitle">Loading prompts…</div>
+        <div class="overlayText">Getting your inspiration ready.</div>
+      </div>
+    </div>
+
+    <!-- TIMER OVERLAY (works everywhere; no dialog dependency) -->
+    <div class="overlay hidden" id="timerOverlay" role="dialog" aria-modal="true" aria-label="Challenge timer">
+      <div class="modal">
+        <div class="modalHead">
+          <strong>Challenge Timer</strong>
+          <button class="ghost" id="closeTimerBtn" type="button" aria-label="Close timer">✕</button>
+        </div>
+
+        <p class="muted">Pick a timer and shoot until it ends. Then choose your best photo.</p>
+
+        <div class="row">
+          <button class="secondary tbtn" data-min="5" type="button">5 min</button>
+          <button class="secondary tbtn" data-min="10" type="button">10 min</button>
+          <button class="secondary tbtn" data-min="20" type="button">20 min</button>
+        </div>
+
+        <div class="timerBox">
+          <div class="time" id="timeLeft">00:00</div>
+          <div class="muted" id="timerHint">Not started</div>
+        </div>
+
+        <div class="row">
+          <button class="secondary" id="stopTimerBtn" type="button">Stop</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </div>
+
+  <!-- App JS (loads data.json inside app.js) -->
+  <script src="app.js" defer></script>
+</body>
+</html>
