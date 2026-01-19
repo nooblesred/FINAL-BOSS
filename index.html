@@ -136,8 +136,21 @@
     <section class="panel" id="tab-favorites" aria-label="Favorites">
       <div class="panelHead">
         <h2>Favorites</h2>
-        <button class="ghost" id="clearFavBtn" type="button">Clear</button>
+        <div class="favTopRight">
+          <button class="ghost" id="newFolderBtn" type="button">New Folder</button>
+          <button class="ghost" id="clearFavBtn" type="button">Clear</button>
+        </div>
       </div>
+
+      <div class="folderBar" aria-label="Favorite folders">
+        <label class="field" style="margin:0;">
+          <span>Folder</span>
+          <select id="folderSelect">
+            <option value="all">All</option>
+          </select>
+        </label>
+      </div>
+
       <div id="favoritesList" class="list" aria-label="Favorite prompts"></div>
     </section>
 
@@ -154,7 +167,7 @@
       <small>No posting, no likes — just ideas that spark photography.</small>
     </footer>
 
-    <!-- LOADING OVERLAY (used while data.json is loading) -->
+    <!-- LOADING OVERLAY -->
     <div class="overlay hidden" id="loadingOverlay" aria-hidden="true">
       <div class="overlayCard" role="status" aria-live="polite">
         <div class="spinner" aria-hidden="true"></div>
@@ -163,7 +176,7 @@
       </div>
     </div>
 
-    <!-- TIMER OVERLAY (works everywhere; no dialog dependency) -->
+    <!-- TIMER OVERLAY -->
     <div class="overlay hidden" id="timerOverlay" role="dialog" aria-modal="true" aria-label="Challenge timer">
       <div class="modal">
         <div class="modalHead">
@@ -190,10 +203,63 @@
       </div>
     </div>
 
+    <!-- (1) DAILY OVERLAY -->
+    <div class="overlay hidden" id="dailyOverlay" role="dialog" aria-modal="true" aria-label="Daily prompt">
+      <div class="modal">
+        <div class="modalHead">
+          <strong>Daily Prompt</strong>
+          <button class="ghost" id="closeDailyBtn" type="button" aria-label="Close daily">✕</button>
+        </div>
+
+        <div class="meta" style="margin-top:8px;">
+          <span class="pill" id="dailyPillCat">—</span>
+          <span class="pill subtle" id="dailyPillDiff">—</span>
+          <span class="pill subtle" id="dailyPillTerrain">—</span>
+          <span class="pill subtle" id="dailyPillMode">DAILY</span>
+        </div>
+
+        <h3 class="modalTitle" id="dailyTitle">—</h3>
+        <p class="muted" id="dailyText">—</p>
+
+        <div class="mini" style="margin-top:10px;">
+          <div class="miniLabel">Quick constraints</div>
+          <ul id="dailyConstraints"></ul>
+        </div>
+
+        <div class="row">
+          <button id="useDailyBtn" type="button">Use This Prompt</button>
+          <button class="secondary" id="dailyClose2Btn" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- (2) FOLDER / SAVE MODAL -->
+    <div class="overlay hidden" id="folderOverlay" role="dialog" aria-modal="true" aria-label="Save to folders">
+      <div class="modal">
+        <div class="modalHead">
+          <strong id="folderModalTitle">Save to folders</strong>
+          <button class="ghost" id="closeFolderBtn" type="button" aria-label="Close folders">✕</button>
+        </div>
+
+        <p class="muted" id="folderModalHint">Choose where to save this prompt. You can create new folders too.</p>
+
+        <div class="folderCreate">
+          <input id="newFolderName" type="text" placeholder="New folder name (e.g., Night Mood)" />
+          <button class="secondary" id="createFolderBtn" type="button">Create</button>
+        </div>
+
+        <div class="folderList" id="folderChecklist" aria-label="Folder checklist"></div>
+
+        <div class="row">
+          <button id="applyFoldersBtn" type="button">Save</button>
+          <button class="secondary" id="cancelFoldersBtn" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>
 
-  <!-- App JS (loads data.json inside app.js) -->
   <script src="app.js" defer></script>
 </body>
 </html>
