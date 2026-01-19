@@ -1,14 +1,24 @@
 /* =========================
    PhotoSpark — app.js
-   Loads prompts from data.json (Option A)
-   App logic is separate from large prompt packs.
+   Option A: loads prompts from data.json
+   Upgrades:
+   (1) Versioned cache reset (DATA_VERSION)
+   (2) Debounced search (smooth for 10k prompts)
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   // -------- CONFIG --------
-  const PROMPTS_URL = "data.json";      // we'll add this file next
-  const PROMPTS_VERSION = "v1";         // bump this if data format changes
-  const CACHE_KEY = `ps_prompts_cache_${PROMPTS_VERSION}`;
+  const PROMPTS_URL = "data.json";
+
+  // App logic version (change only if you change code behavior)
+  const APP_VERSION = "v2";
+
+  // (1) DATA_VERSION: BUMP THIS whenever you replace/expand data.json
+  // Example: "2026-01-19-50" then later "2026-01-20-5000"
+  const DATA_VERSION = "2026-01-19-50";
+
+  // Cache key includes DATA_VERSION so old cached prompt sets are ignored automatically
+  const CACHE_KEY = `ps_prompts_cache_${APP_VERSION}_${DATA_VERSION}`;
 
   const LS = {
     fav: "ps_fav_v1",
@@ -81,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // -------- STATE --------
-  let PROMPTS = [];         // loaded from data.json
+  let PROMPTS = [];
   let current = null;
 
   // Timer state
@@ -117,6 +127,15 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(key, JSON.stringify(val));
   }
 
+  // -------- (2) DEBOUNCE --------
+  function debounce(fn, waitMs = 200) {
+    let t = null;
+    return (...args) => {
+      if (t) clearTimeout(t);
+      t = setTimeout(() => fn(...args), waitMs);
+    };
+  }
+
   // -------- PROMPT HELPERS --------
   function pick(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -142,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ].join(" ").toLowerCase();
   }
 
-  // Validate & normalize prompt objects
   function normalizePrompt(raw) {
     const p = {
       cat: String(raw.cat || "Any"),
@@ -175,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Daily: deterministic pick based on date + filters/search
+  // Daily deterministic pick
   function dailyKey() {
     const q = (el.search.value || "").trim().toLowerCase();
     return `${new Date().toDateString()}|${el.category.value}|${el.diff.value}|${el.terrain.value}|${q}`;
@@ -217,12 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
       el.constraints.appendChild(li);
     });
 
-    // Save button state
     const favs = load(LS.fav, []);
     const isFav = favs.some(x => x.title === p.title && x.cat === p.cat);
     el.saveBtn.textContent = isFav ? "★ Saved" : "☆ Save";
 
-    // Notes
     if (modeLabel === "DAILY") {
       el.noteLine.textContent = "Daily: stays the same all day for your current filters/search.";
     } else if ((el.search.value || "").trim()) {
@@ -237,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function pushHistory(p) {
     const hist = load(LS.hist, []);
     const entry = { cat: p.cat, diff: p.diff, title: p.title, text: p.text, ts: Date.now() };
-    const next = [entry, ...hist.filter(h => h.title !== p.title)].slice(0, 40);
+    const next = [entry, ...hist.filter(h => h.title !== p.title)].slice(0, 60);
     save(LS.hist, next);
     renderHistory();
     updateStats();
@@ -323,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toast("Saved");
     }
 
-    save(LS.fav, favs.slice(0, 200));
+    save(LS.fav, favs.slice(0, 500));
     renderFavorites();
 
     const isFav = load(LS.fav, []).some(x => x.title === current.title && x.cat === current.cat);
@@ -426,14 +442,11 @@ Constraints:
       if (p) {
         renderPrompt(p, "HISTORY");
         setTab("prompt");
-      } else {
-        renderPrompt(normalizePrompt({ cat: h.cat, diff: h.diff, terrain: ["Any"], title: h.title, text: h.text, constraints: ["(From history)"] }), "HISTORY");
-        setTab("prompt");
       }
     }
   }
 
-  // -------- TIMER (custom overlay) --------
+  // -------- TIMER --------
   function openTimer() { showTimer(true); }
   function closeTimer() { showTimer(false); }
 
@@ -478,7 +491,7 @@ Constraints:
   }
 
   async function loadPrompts() {
-    // 1) Try cache first (instant startup)
+    // Cache first (instant)
     const cached = load(CACHE_KEY, null);
     if (Array.isArray(cached) && cached.length) {
       PROMPTS = cached;
@@ -494,7 +507,7 @@ Constraints:
       return;
     }
 
-    // 2) No cache: show loading overlay and fetch
+    // No cache
     showLoading(true);
     try {
       const fresh = await fetchPrompts();
@@ -509,7 +522,7 @@ Constraints:
     }
   }
 
-  // -------- WIRING EVENTS --------
+  // -------- EVENTS --------
   function wireEvents() {
     // Tabs
     el.tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
@@ -525,7 +538,10 @@ Constraints:
     el.category.addEventListener("change", newPrompt);
     el.diff.addEventListener("change", newPrompt);
     el.terrain.addEventListener("change", newPrompt);
-    el.search.addEventListener("input", newPrompt);
+
+    // (2) Debounced search input
+    const debouncedSearch = debounce(newPrompt, 220);
+    el.search.addEventListener("input", debouncedSearch);
 
     // Lists
     el.favoritesList.addEventListener("click", listHandler);
@@ -554,12 +570,10 @@ Constraints:
       b.addEventListener("click", () => startTimer(Number(b.dataset.min)));
     });
 
-    // close timer when tapping outside modal
     el.timerOverlay.addEventListener("click", (e) => {
       if (e.target === el.timerOverlay) closeTimer();
     });
 
-    // Escape closes timer
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !el.timerOverlay.classList.contains("hidden")) closeTimer();
     });
@@ -570,7 +584,7 @@ Constraints:
   loadPrompts().catch(err => {
     showLoading(false);
     el.title.textContent = "Couldn’t load prompts";
-    el.text.textContent = "Next step: add data.json to your GitHub repo root.";
+    el.text.textContent = "Check that data.json exists in the repo root and is valid JSON.";
     toast(err.message);
     console.error(err);
   });
