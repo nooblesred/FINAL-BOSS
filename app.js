@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const PROMPTS_URL = "data.json";
 
   // BUMP THIS whenever you replace/expand data.json
-  const DATA_VERSION = "2026-01-19-50";
+  const DATA_VERSION = "2026-01-19-5000";
 
   const CACHE_KEY = `ps_prompts_cache_${DATA_VERSION}`;
 
